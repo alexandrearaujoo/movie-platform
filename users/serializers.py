@@ -10,7 +10,7 @@ class UserSerializer(serializers.Serializer):
             ]
         )
     first_name = serializers.CharField(max_length=50)
-    password = serializers.CharField(max_length=255)
+    password = serializers.CharField(max_length=255, write_only=True)
     last_name = serializers.CharField(max_length=50)
     date_joined = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
