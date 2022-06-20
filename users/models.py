@@ -8,4 +8,7 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=50)
     updated_at = models.DateTimeField(auto_now=True)
 
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
+    objects = CustomUserManager()
