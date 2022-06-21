@@ -1,9 +1,10 @@
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
-from movies import serializers
 
-from users.serializers import UserSerializer
+from users.serializers import LoginSerializer, UserSerializer
 
 
 class UserView(APIView):
@@ -16,3 +17,23 @@ class UserView(APIView):
 
         return Response(serializer.data, status.HTTP_201_CREATED)
 
+class LoginView(APIView):
+    def post(self, request): 
+        serializer = LoginSerializer(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+
+        email = serializer.validated_data["email"]
+        password = serializer.validated_data["password"]
+
+        user = authenticate(username=email, password=password)
+
+        if user: 
+            token, _ = Token.objects.get_or_create(user=user)
+
+            return Response({"token": token.key}, status.HTTP_200_OK)
+
+        return Response(
+            {"detail": "invalid email or password"},
+            status.HTTP_401_UNAUTHORIZED
+        )
