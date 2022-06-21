@@ -6,4 +6,7 @@ class Review(models.Model):
     spoilers = models.BooleanField(default=False)
     recomenadation = models.CharField(max_length=50)
 
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='users')
+
+    
     

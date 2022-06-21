@@ -6,3 +6,10 @@ class Movie(models.Model):
     premiere = models.DateField()
     classification = models.IntegerField()
     synopsis = models.TextField()
+
+    genres = models.ManyToManyField(
+        'genres.Genre',
+        related_name='genres'
+    )
+
+    review = models.ForeignKey('reviews.Review', on_delete=models.CASCADE, related_name='reviews')
