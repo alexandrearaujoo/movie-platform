@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
+from movies import serializers
 
 from users.serializers import UserSerializer
 
@@ -14,3 +15,4 @@ class UserView(APIView):
         serializer.save()
 
         return Response(serializer.data, status.HTTP_201_CREATED)
+
