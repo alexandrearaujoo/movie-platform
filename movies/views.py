@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView, Response, status
-from models import Movie
-from serializers import MovieSerializer
+from .models import Movie
+from .serializers import MovieSerializer
 
 class MovieView(APIView):
     def get(self, request): 
