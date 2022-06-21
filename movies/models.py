@@ -11,5 +11,3 @@ class Movie(models.Model):
         'genres.Genre',
         related_name='genres'
     )
-
-    review = models.ForeignKey('reviews.Review', on_delete=models.CASCADE, related_name='reviews')
