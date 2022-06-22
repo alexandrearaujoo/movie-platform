@@ -4,12 +4,16 @@ from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.authentication import TokenAuthentication
 from users.models import User
+from users.permissions import UserPermissionsCustom
 
 from users.serializers import LoginSerializer, UserSerializer
 
 
 class UserView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [UserPermissionsCustom]
 
     def get(self, request):
         users = User.objects.all()
@@ -28,6 +32,9 @@ class UserView(APIView):
         return Response(serializer.data, status.HTTP_201_CREATED)
 
 class UserViewDetail(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [UserPermissionsCustom]
+    
     def get(self, request, user_id):
         user = get_object_or_404(User, pk=user_id)
 
