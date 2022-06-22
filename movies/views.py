@@ -1,3 +1,4 @@
+from functools import partial
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView, Response, status
 from .models import Movie
@@ -25,5 +26,14 @@ class MovieViewDetail(APIView):
         movie = get_object_or_404(Movie, pk=movie_id)
 
         serializer = MovieSerializer(movie)
+
+        return Response(serializer.data, status.HTTP_200_OK)
+
+    def patch(self, request, movie_id): 
+        movie = get_object_or_404(Movie, pk=movie_id)
+
+        serializer = MovieSerializer(movie, data=request.data, partial=True)
+
+        serializer.save()
 
         return Response(serializer.data, status.HTTP_200_OK)
