@@ -1,11 +1,14 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView, Response, status
 from rest_framework.authentication import TokenAuthentication
+
+from movies.permissions import MoviePermissionsCustom
 from .models import Movie
 from .serializers import MovieSerializer
 
 class MovieView(APIView):
-
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [MoviePermissionsCustom]
 
     def get(self, request): 
         movies = Movie.objects.all()
@@ -24,6 +27,8 @@ class MovieView(APIView):
         return Response(serializer.data, status.HTTP_201_CREATED)
 
 class MovieViewDetail(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [MoviePermissionsCustom]
 
     def get(self, request, movie_id):
         movie = get_object_or_404(Movie, pk=movie_id)
