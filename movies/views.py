@@ -34,6 +34,8 @@ class MovieViewDetail(APIView):
 
         serializer = MovieSerializer(movie, data=request.data, partial=True)
 
+        serializer.is_valid(raise_exception=True)
+
         serializer.save()
 
         return Response(serializer.data, status.HTTP_200_OK)
@@ -43,4 +45,4 @@ class MovieViewDetail(APIView):
 
         movie.delete()
 
-        return Response(status.HTTP_204_NO_CONTENT)
+        return Response({},status.HTTP_204_NO_CONTENT)
