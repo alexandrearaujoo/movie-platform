@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from rest_framework.views import APIView
@@ -25,6 +26,14 @@ class UserView(APIView):
         serializer.save()
 
         return Response(serializer.data, status.HTTP_201_CREATED)
+
+class UserViewDetail(APIView):
+    def get(self, request, user_id):
+        user = get_object_or_404(User, pk=user_id)
+
+        serializer = UserSerializer(user)
+
+        return Response(serializer.data, status.HTTP_200_OK)
 
 class LoginView(APIView):
     def post(self, request): 
