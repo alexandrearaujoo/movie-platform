@@ -5,22 +5,25 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
+from project.pagination import CustomPageNumberPagination
 from users.models import User
 from users.permissions import UserPermissionsCustom
 
 from users.serializers import LoginSerializer, UserSerializer
 
 
-class UserView(APIView):
+class UserView(APIView, CustomPageNumberPagination):
     authentication_classes = [TokenAuthentication]
     permission_classes = [UserPermissionsCustom]
 
     def get(self, request):
         users = User.objects.all()
 
-        serializer = UserSerializer(users, many=True)
+        result_page = self.paginate_queryset(users, request, view=self)
 
-        return Response(serializer.data, status.HTTP_200_OK)
+        serializer = UserSerializer(result_page, many=True)
+
+        return self.get_paginated_response(serializer.data)
 
     def post(self, request):
         serializer = UserSerializer(data=request.data)

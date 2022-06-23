@@ -2,26 +2,29 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView, Response, status
 from rest_framework.authentication import TokenAuthentication
 from .permissions import ReviewPermissionsCustom
+from project.pagination import CustomPageNumberPagination
 from .helpers import response_formatted
 
 from .models import Review
 from .serializers import ReviewSerializer
 
-class ReviewView(APIView):
+class ReviewView(APIView, CustomPageNumberPagination):
     authentication_classes = [TokenAuthentication]
     permission_classes = [ReviewPermissionsCustom]
 
     def get(self, request):
         reviews = Review.objects.all()
 
-        serializer = ReviewSerializer(reviews, many=True)
+        result_page = self.paginate_queryset(reviews, request, view=self)
+
+        serializer = ReviewSerializer(result_page, many=True)
 
         serializer_data = []
 
         for values in serializer.data:
             serializer_data.append(response_formatted(values))
 
-        return Response(serializer_data, status.HTTP_200_OK)
+        return self.get_paginated_response(serializer_data)
 
 class ReviewViewDetail(APIView):
     authentication_classes = [TokenAuthentication]
@@ -33,14 +36,16 @@ class ReviewViewDetail(APIView):
         if not reviews:
             return Response({"message": "Movie review not found"}, status.HTTP_400_BAD_REQUEST)
 
-        serializer = ReviewSerializer(reviews, many=True)
+        result_page = self.paginate_queryset(reviews, request, view=self)
+
+        serializer = ReviewSerializer(result_page, many=True)
 
         serializer_data = []
 
         for values in serializer.data:
             serializer_data.append(response_formatted(values))
 
-        return Response(serializer_data, status.HTTP_200_OK)
+        return self.get_paginated_response(serializer_data)
 
     def post(self, request, movie_id):
 
