@@ -1,12 +1,22 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
+from movies.models import Movie
 from reviews.models import Review
-
-from users.serializers import UserSerializer
+from users.models import User
 
 class ReviewSerializer(serializers.ModelSerializer):
-    critic = UserSerializer()
 
     class Meta:
         model = Review
-        fields = ['id','stars', 'review', 'spoilers', 'recomendations']
-        read_only_fields = ['id', 'movie_id', 'critic']
+        fields = "__all__"
+        depth = 1
+
+    def create(self, validated_data):
+        user = get_object_or_404(User, pk=validated_data["user"])
+        movie = get_object_or_404(Movie, pk=validated_data["movie"])
+
+        validated_data["user"] = user
+        validated_data["movie"] = movie
+        review = Review.objects.create(**validated_data)
+
+        return review

@@ -3,7 +3,6 @@ from genres.models import Genre
 
 from genres.serializers import GenreSerializer
 from movies.models import Movie
-from reviews.serializers import ReviewSerializers
 
 class MovieSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
