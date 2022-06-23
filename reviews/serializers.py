@@ -1,12 +1,12 @@
 from rest_framework import serializers
+from reviews.models import Review
 
 from users.serializers import UserSerializer
 
-class ReviewSerializers(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    starts = serializers.IntegerField() 
-    review = serializers.CharField(max_length=255)
-    spoilers = serializers.BooleanField(default=False)
-    recomendation = serializers.CharField(max_length=50)
+class ReviewSerializer(serializers.ModelSerializer):
+    critic = UserSerializer()
 
-    user = UserSerializer()
+    class Meta:
+        model = Review
+        fields = ['id','stars', 'review', 'spoilers', 'recomendations']
+        read_only_fields = ['id', 'movie_id', 'critic']

@@ -16,7 +16,7 @@ class Review(models.Model):
         default=CategoryRecomendation.NO_OPINION
     )
 
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='users')
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='critic')
 
 
     
