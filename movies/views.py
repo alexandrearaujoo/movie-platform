@@ -3,10 +3,11 @@ from rest_framework.views import APIView, Response, status
 from rest_framework.authentication import TokenAuthentication
 
 from movies.permissions import MoviePermissionsCustom
+from project.pagination import CustomPageNumberPagination
 from .models import Movie
 from .serializers import MovieSerializer
 
-class MovieView(APIView):
+class MovieView(APIView, CustomPageNumberPagination):
     authentication_classes = [TokenAuthentication]
     permission_classes = [MoviePermissionsCustom]
 

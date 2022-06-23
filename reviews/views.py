@@ -26,7 +26,7 @@ class ReviewView(APIView, CustomPageNumberPagination):
 
         return self.get_paginated_response(serializer_data)
 
-class ReviewViewDetail(APIView):
+class ReviewViewDetail(APIView, CustomPageNumberPagination):
     authentication_classes = [TokenAuthentication]
     permission_classes = [ReviewPermissionsCustom]
     
