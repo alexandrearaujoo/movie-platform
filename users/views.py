@@ -25,15 +25,6 @@ class UserView(APIView, CustomPageNumberPagination):
 
         return self.get_paginated_response(serializer.data)
 
-    def post(self, request):
-        serializer = UserSerializer(data=request.data)
-
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save()
-
-        return Response(serializer.data, status.HTTP_201_CREATED)
-
 class UserViewDetail(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [UserPermissionsCustom]
@@ -65,3 +56,14 @@ class LoginView(APIView):
             {"detail": "invalid email or password"},
             status.HTTP_401_UNAUTHORIZED
         )
+
+class CreateUserView(APIView):
+        def post(self, request):
+
+            serializer = UserSerializer(data=request.data)
+
+            serializer.is_valid(raise_exception=True)
+
+            serializer.save()
+
+            return Response(serializer.data, status.HTTP_201_CREATED)
